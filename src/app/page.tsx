@@ -1,5 +1,13 @@
 const projects = [
   {
+    title: "Lattice",
+    description:
+      "Cellular automata as music. 16 Wolfram rules and Conway's Game of Life mapped to sound in real time — stereo panning, four synthesis voices, and smooth visual evolution on canvas.",
+    date: "March 2026",
+    href: "https://joaquincampo.github.io/lattice/",
+    tags: ["audio", "generative", "interactive", "web audio"],
+  },
+  {
     title: "Emergence",
     description:
       "Ten interactive pieces exploring how complexity arises from simplicity. Synchronization, chaos, slime molds, and silence.",
