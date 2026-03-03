@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Drift",
+    description:
+      "A terminal roguelike set in a derelict space station. BSP dungeon generation, recursive shadowcasting FOV, A* pathfinding, oxygen management, five decks of increasing danger \u2014 all rendered in Unicode with ANSI escape codes. Zero dependencies.",
+    date: "Mar 2026",
+    href: "https://github.com/JoaquinCampo/drift",
+    tags: ["typescript", "game", "roguelike", "terminal"],
+  },
+  {
     title: "Rosetta",
     description:
       "A universal data decoder for the command line. Pipe in any opaque data \u2014 JWTs, timestamps, base64, cron expressions, UUIDs, colors, IPs, hashes \u2014 and Rosetta auto-detects the format and explains it. 18 detectors, zero config, just pipe and go.",
