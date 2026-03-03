@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Tapper",
+    description:
+      "A pipeline debugger for Unix shell commands. Run a pipeline, see what flows through every stage \u2014 line counts, byte sizes, timing, filter percentages \u2014 in a TUI or a flow diagram on stdout. 20 tests.",
+    date: "Mar 2026",
+    href: "https://github.com/JoaquinCampo/tapper",
+    tags: ["rust", "CLI", "pipeline debugger", "developer tools"],
+  },
+  {
     title: "Dredge",
     description:
       "A fast, smart log analysis tool for the terminal. Auto-detects formats (JSON Lines, logfmt, CLF, syslog), clusters similar errors by normalizing variable parts, spots time trends, and gives you a clear summary instead of walls of text. 59 tests.",
