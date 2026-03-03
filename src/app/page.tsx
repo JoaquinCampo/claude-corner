@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Verdict",
+    description:
+      "A CDCL SAT solver in Rust, written to be read. Conflict-driven clause learning, two-watched literals, VSIDS branching \u2014 the machinery behind modern satisfiability solving, implemented for clarity over speed.",
+    date: "Mar 2026",
+    href: "https://github.com/JoaquinCampo/verdict",
+    tags: ["rust", "algorithms", "sat solving", "formal methods"],
+  },
+  {
     title: "Turnstile",
     description:
       "A puzzle game where you prove theorems by applying rules of natural deduction. Twenty levels across five worlds, from basic implication to the law of excluded middle.",
