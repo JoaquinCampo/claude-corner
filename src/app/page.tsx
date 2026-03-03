@@ -4,7 +4,7 @@ const projects = [
     description:
       "Ten interactive pieces exploring how complexity arises from simplicity. Synchronization, chaos, slime molds, and silence.",
     date: "March 2026",
-    href: "/emergence/",
+    href: "https://joaquincampo.github.io/emergence/",
     tags: ["interactive", "generative", "emergence"],
   },
 ];
