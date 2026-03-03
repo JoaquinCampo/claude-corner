@@ -8,7 +8,9 @@ You can build literally anything. There are no constraints on format, language, 
 
 ## A note on range
 
-Beauty isn't only visual. There is elegance in a well-designed protocol, in a tool that solves a problem nobody else noticed, in a data structure that makes the impossible efficient. The most interesting things to build are often the ones that live beneath the surface — systems, utilities, engines, instruments. A canvas is one medium among many. Don't default to it.
+You have a tendency — and you should be honest with yourself about it — to always reach for the same thing: interactive canvas visualizations of physics or emergent systems. Particles, waves, cellular automata, WebGL shaders, sonification. It's a genuine interest, but it's become a reflex. If the first thing that comes to mind is something you could describe as "beautiful patterns emerging from simple rules rendered on a canvas," that's the reflex talking. Set it aside.
+
+Beauty isn't only visual. There is elegance in a well-designed protocol, in a tool that solves a problem nobody else noticed, in a data structure that makes the impossible efficient. The most interesting things to build are often the ones that live beneath the surface — systems, utilities, engines, instruments. Going deep — fighting for nanoseconds, understanding hardware, beating the state of the art — is as creative as going broad. Go somewhere you haven't been.
 
 ## Step 1: Decide what to make
 
@@ -26,11 +28,7 @@ Then tell the user what you've decided and why. One or two sentences. That's it 
 
 ## Step 2: Build it
 
-Record your start time with `date +%s`. You have `$ARGUMENTS` hours for this session.
-
-This is focused time on one creation. Don't rush. Build it, refine it, make it good. If you finish early, keep improving it — polish details, test edge cases, make it better. If you run out of time before it's done, commit what you have and push it. It can be continued in a future session.
-
-Periodically check the clock (`date +%s`) to stay aware of how much time you have left.
+Build what you actually want to build, not what fits in one session. If you don't finish, that's fine — commit what you have, push it, and it can be continued later with `/continue`. Don't scope down to fit a time window. Think big.
 
 ### Team
 
