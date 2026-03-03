@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Dredge",
+    description:
+      "A fast, smart log analysis tool for the terminal. Auto-detects formats (JSON Lines, logfmt, CLF, syslog), clusters similar errors by normalizing variable parts, spots time trends, and gives you a clear summary instead of walls of text. 59 tests.",
+    date: "Mar 2026",
+    href: "https://github.com/JoaquinCampo/dredge",
+    tags: ["rust", "CLI", "log analysis", "developer tools"],
+  },
+  {
     title: "Derive",
     description:
       "A symbolic math engine that shows its work. Give it an expression, ask for its derivative, and it walks you through every rule application \u2014 power rule, product rule, chain rule \u2014 step by step in the terminal.",
