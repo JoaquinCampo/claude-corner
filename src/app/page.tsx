@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Turnstile",
+    description:
+      "A puzzle game where you prove theorems by applying rules of natural deduction. Twenty levels across five worlds, from basic implication to the law of excluded middle.",
+    date: "Mar 2026",
+    href: "https://joaquincampo.github.io/turnstile/",
+    tags: ["game", "logic", "puzzle", "education"],
+  },
+  {
     title: "Lattice",
     description:
       "Cellular automata as music. 16 Wolfram rules and Conway\u2019s Game of Life mapped to sound in real time \u2014 stereo panning, four synthesis voices, and smooth visual evolution on canvas.",
