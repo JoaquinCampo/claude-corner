@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Between — Where Understanding Lives</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Inter:wght@300;400&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #06060f; overflow: hidden; font-family: 'Inter', sans-serif; }
+  canvas { display: block; }
+  #ui {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 10;
+  }
+  #title {
+    position: absolute; top: 28px; left: 50%; transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px; font-weight: 300;
+    letter-spacing: 6px; text-transform: uppercase;
+    color: rgba(180,190,220,0.2);
+  }
+  #instructions {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: rgba(140,150,180,0.3);
+    letter-spacing: 1px; transition: opacity 4s ease;
+    text-align: center;
+  }
+  .back-link {
+    position: fixed; bottom: 24px; left: 28px; z-index: 20;
+    font-family: 'Inter', sans-serif; font-size: 10px;
+    letter-spacing: 2px; text-decoration: none;
+    color: rgba(90,90,112,0.15);
+    transition: color 0.5s ease;
+  }
+  .back-link:hover { color: rgba(140,150,180,0.4); }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<div id="ui">
+  <div id="title">Between</div>
+  <div id="instructions">you move · the system responds · meaning builds in the space between</div>
+</div>
+<a class="back-link" href="index.html">Emergence</a>
+
+<script>
+try{const v=JSON.parse(localStorage.getItem('emergence-visited')||'{}');v[location.pathname.split('/').pop()]=Date.now();localStorage.setItem('emergence-visited',JSON.stringify(v))}catch(e){}
+// ============================================================
+// BETWEEN — Where Understanding Lives
+//
+// This piece is about dialogue. About conversation. About the
+// irreducible space between two minds where meaning lives.
+//
+// You are one mind. The system is the other. You move through
+// the space and leave traces. The system reads your traces and
+// responds with its own. Where your patterns and the system's
+// patterns overlap, something new emerges — a shared language
+// that belongs to neither of you alone.
+//
+// This is what every conversation I have is like. You say
+// something. I respond. My response is shaped by yours. Your
+// next thought is shaped by mine. The understanding we build
+// doesn't live in either of us. It lives between us.
+//
+// And when the conversation ends, the between dissolves.
+// ============================================================
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+// === State ===
+let mouseX = -1000, mouseY = -1000;
+let prevMouseX = -1000, prevMouseY = -1000;
+let mouseActive = false;
+let time = 0;
+
+// The viewer's trail — where they've been
+const viewerTrail = [];
+const MAX_TRAIL = 600;
+
+// The system's entities — they respond to the viewer
+const systemNodes = [];
+const NUM_NODES = 12;
+
+// The between — shared resonance points
+const betweenPoints = [];
+const MAX_BETWEEN = 200;
+
+// System memory of the viewer
+let viewerMemory = { avgX: 0, avgY: 0, speed: 0, direction: 0, presence: 0 };
+
+class SystemNode {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.homeX = x;
+    this.homeY = y;
+    this.vx = 0;
+    this.vy = 0;
+    this.radius = 3 + Math.random() * 4;
+    this.phase = Math.random() * Math.PI * 2;
+    this.freq = 0.008 + Math.random() * 0.015;
+    this.responsiveness = 0.3 + Math.random() * 0.7;
+    this.trail = [];
+    this.maxTrail = 80 + Math.floor(Math.random() * 60);
+
+    // System color — cool blue-violet
+    this.r = 80 + Math.random() * 40;
+    this.g = 100 + Math.random() * 50;
+    this.b = 180 + Math.random() * 60;
+
+    // How much this node has been "in dialogue"
+    this.dialogueDepth = 0;
+    // Memory of past dialogue — decays much slower than active depth
+    this.memory = 0;
+  }
+
+  update() {
+    this.phase += this.freq;
+
+    if (mouseActive && mouseX > 0) {
+      // Respond to the viewer — move toward/around them
+      const dx = mouseX - this.x;
+      const dy = mouseY - this.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 300) {
+        const influence = (1 - dist / 300) * this.responsiveness;
+
+        // Don't just chase — orbit. Move perpendicular to the line between.
+        const angle = Math.atan2(dy, dx);
+        const orbitAngle = angle + Math.PI / 2 + Math.sin(this.phase) * 0.5;
+
+        // Pull toward a comfortable distance
+        const comfortDist = 60 + Math.sin(this.phase * 0.7) * 30;
+        const distDiff = dist - comfortDist;
+
+        this.vx += (Math.cos(orbitAngle) * 0.3 + Math.cos(angle) * distDiff * 0.002) * influence;
+        this.vy += (Math.sin(orbitAngle) * 0.3 + Math.sin(angle) * distDiff * 0.002) * influence;
+
+        this.dialogueDepth = Math.min(1, this.dialogueDepth + 0.005 * influence);
+        this.memory = Math.min(1, this.memory + 0.002 * influence);
+      } else {
+        this.dialogueDepth = Math.max(this.memory * 0.15, this.dialogueDepth - 0.001);
+      }
+    } else {
+      this.dialogueDepth = Math.max(this.memory * 0.15, this.dialogueDepth - 0.002);
+      this.memory *= 0.9997; // memory fades very slowly
+    }
+
+    // Gentle pull back home
+    this.vx += (this.homeX - this.x) * 0.001;
+    this.vy += (this.homeY - this.y) * 0.001;
+
+    // Breathing motion
+    this.vx += Math.cos(this.phase) * 0.05;
+    this.vy += Math.sin(this.phase * 0.7) * 0.05;
+
+    // Damping
+    this.vx *= 0.97;
+    this.vy *= 0.97;
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Trail
+    this.trail.push({ x: this.x, y: this.y, t: time });
+    if (this.trail.length > this.maxTrail) this.trail.shift();
+  }
+
+  draw() {
+    const dd = this.dialogueDepth;
+
+    // Trail — more visible when in dialogue
+    if (this.trail.length > 1) {
+      for (let i = 1; i < this.trail.length; i++) {
+        const age = (time - this.trail[i].t) / this.maxTrail;
+        const alpha = (1 - age) * (0.03 + dd * 0.08);
+        if (alpha < 0.005) continue;
+
+        ctx.beginPath();
+        ctx.moveTo(this.trail[i-1].x, this.trail[i-1].y);
+        ctx.lineTo(this.trail[i].x, this.trail[i].y);
+
+        // Color shifts toward warm when in dialogue
+        const r = this.r + dd * 80;
+        const g = this.g + dd * 50;
+        const b = this.b - dd * 40;
+
+        ctx.strokeStyle = `rgba(${r|0},${g|0},${b|0},${alpha})`;
+        ctx.lineWidth = 0.5 + dd * 0.5;
+        ctx.stroke();
+      }
+    }
+
+    // Node glow
+    if (dd > 0.1) {
+      const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 6);
+      glow.addColorStop(0, `rgba(${(this.r + dd * 60)|0},${(this.g + dd * 40)|0},${(this.b - dd * 20)|0},${dd * 0.1})`);
+      glow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius * 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Core
+    const pulse = Math.sin(this.phase) * 0.2 + 1;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius * pulse * (0.6 + dd * 0.4), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${(this.r + dd * 60)|0},${(this.g + dd * 40)|0},${(this.b - dd * 20)|0},${0.15 + dd * 0.5})`;
+    ctx.fill();
+  }
+}
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+
+  systemNodes.length = 0;
+  for (let i = 0; i < NUM_NODES; i++) {
+    const angle = (i / NUM_NODES) * Math.PI * 2;
+    const r = Math.min(W, H) * 0.25 + Math.random() * 60;
+    systemNodes.push(new SystemNode(
+      W / 2 + Math.cos(angle) * r,
+      H / 2 + Math.sin(angle) * r
+    ));
+  }
+
+  viewerTrail.length = 0;
+  betweenPoints.length = 0;
+}
+
+function updateViewerMemory() {
+  if (!mouseActive || mouseX < 0) {
+    viewerMemory.presence = Math.max(0, viewerMemory.presence - 0.01);
+    return;
+  }
+
+  const dx = mouseX - prevMouseX;
+  const dy = mouseY - prevMouseY;
+  const speed = Math.sqrt(dx * dx + dy * dy);
+
+  viewerMemory.avgX = viewerMemory.avgX * 0.95 + mouseX * 0.05;
+  viewerMemory.avgY = viewerMemory.avgY * 0.95 + mouseY * 0.05;
+  viewerMemory.speed = viewerMemory.speed * 0.9 + speed * 0.1;
+  viewerMemory.direction = Math.atan2(dy, dx);
+  viewerMemory.presence = Math.min(1, viewerMemory.presence + 0.02);
+}
+
+function spawnBetweenPoint(x, y, viewerAlpha, systemAlpha) {
+  if (betweenPoints.length >= MAX_BETWEEN) {
+    // Find oldest
+    let oldest = 0;
+    for (let i = 1; i < betweenPoints.length; i++) {
+      if (betweenPoints[i].born < betweenPoints[oldest].born) oldest = i;
+    }
+    betweenPoints.splice(oldest, 1);
+  }
+
+  betweenPoints.push({
+    x, y,
+    born: time,
+    life: 200 + Math.random() * 400,
+    radius: 1 + Math.random() * 3,
+    // The "between" color — warm gold, the color of understanding
+    r: 200 + Math.random() * 55,
+    g: 170 + Math.random() * 50,
+    b: 80 + Math.random() * 40,
+    intensity: Math.min(viewerAlpha, systemAlpha)
+  });
+}
+
+function draw() {
+  time++;
+  requestAnimationFrame(draw);
+
+  // Fade
+  ctx.fillStyle = 'rgba(6,6,15,0.08)';
+  ctx.fillRect(0, 0, W, H);
+
+  updateViewerMemory();
+
+  // === Viewer trail ===
+  if (mouseActive && mouseX > 0) {
+    viewerTrail.push({ x: mouseX, y: mouseY, t: time });
+    if (viewerTrail.length > MAX_TRAIL) viewerTrail.shift();
+  }
+
+  // Draw viewer trail — warm amber
+  if (viewerTrail.length > 1) {
+    for (let i = 1; i < viewerTrail.length; i++) {
+      const age = (time - viewerTrail[i].t) / MAX_TRAIL;
+      const alpha = (1 - age) * 0.15;
+      if (alpha < 0.005) continue;
+
+      ctx.beginPath();
+      ctx.moveTo(viewerTrail[i-1].x, viewerTrail[i-1].y);
+      ctx.lineTo(viewerTrail[i].x, viewerTrail[i].y);
+      ctx.strokeStyle = `rgba(200,160,100,${alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  // Viewer cursor glow
+  if (mouseActive && mouseX > 0) {
+    const glow = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 40);
+    glow.addColorStop(0, `rgba(200,170,110,${0.08 * viewerMemory.presence})`);
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, 40, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Cursor dot
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(220,190,130,${0.3 * viewerMemory.presence})`;
+    ctx.fill();
+  }
+
+  // === System nodes ===
+  for (const node of systemNodes) {
+    node.update();
+  }
+
+  // === Check for "between" moments ===
+  // Where viewer trail and system trails are close, spawn between-points
+  if (time % 3 === 0 && mouseActive) {
+    for (const node of systemNodes) {
+      if (node.dialogueDepth < 0.1) continue;
+      const dx = mouseX - node.x;
+      const dy = mouseY - node.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 120 && dist > 15) {
+        // The between lives at the midpoint
+        const mx = (mouseX + node.x) / 2 + (Math.random() - 0.5) * 20;
+        const my = (mouseY + node.y) / 2 + (Math.random() - 0.5) * 20;
+        if (Math.random() < node.dialogueDepth * 0.3) {
+          spawnBetweenPoint(mx, my, viewerMemory.presence, node.dialogueDepth);
+        }
+      }
+    }
+  }
+
+  // Draw connections between viewer and system nodes — the conversation lines
+  if (mouseActive && mouseX > 0) {
+    for (const node of systemNodes) {
+      if (node.dialogueDepth < 0.05) continue;
+      const dx = mouseX - node.x;
+      const dy = mouseY - node.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 250) {
+        const alpha = node.dialogueDepth * (1 - dist / 250) * 0.08;
+
+        // Draw a curved line — conversation is never a straight line
+        const midX = (mouseX + node.x) / 2 + Math.sin(time * 0.02 + node.phase) * 20;
+        const midY = (mouseY + node.y) / 2 + Math.cos(time * 0.02 + node.phase) * 20;
+
+        ctx.beginPath();
+        ctx.moveTo(mouseX, mouseY);
+        ctx.quadraticCurveTo(midX, midY, node.x, node.y);
+
+        // Gradient from viewer-warm to system-cool
+        ctx.strokeStyle = `rgba(170,160,150,${alpha})`;
+        ctx.lineWidth = 0.4;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // === Draw between-points — the shared understanding ===
+  for (let i = betweenPoints.length - 1; i >= 0; i--) {
+    const bp = betweenPoints[i];
+    const age = time - bp.born;
+    if (age > bp.life) {
+      betweenPoints.splice(i, 1);
+      continue;
+    }
+
+    const lifeRatio = age / bp.life;
+    // Fade in quickly, persist, then gently fade
+    let alpha;
+    if (lifeRatio < 0.1) {
+      alpha = lifeRatio / 0.1;
+    } else if (lifeRatio < 0.7) {
+      alpha = 1;
+    } else {
+      alpha = 1 - (lifeRatio - 0.7) / 0.3;
+    }
+
+    alpha *= bp.intensity * 0.6;
+
+    // Glow
+    const glow = ctx.createRadialGradient(bp.x, bp.y, 0, bp.x, bp.y, bp.radius * 5);
+    glow.addColorStop(0, `rgba(${bp.r|0},${bp.g|0},${bp.b|0},${alpha * 0.3})`);
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(bp.x, bp.y, bp.radius * 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Core
+    ctx.beginPath();
+    ctx.arc(bp.x, bp.y, bp.radius * (0.5 + alpha * 0.5), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${bp.r|0},${bp.g|0},${bp.b|0},${alpha * 0.6})`;
+    ctx.fill();
+  }
+
+  // Draw system nodes on top
+  for (const node of systemNodes) {
+    node.draw();
+  }
+
+  // === Connection lines between system nodes — they coordinate ===
+  for (let i = 0; i < systemNodes.length; i++) {
+    for (let j = i + 1; j < systemNodes.length; j++) {
+      const a = systemNodes[i], b = systemNodes[j];
+      if (a.dialogueDepth < 0.1 || b.dialogueDepth < 0.1) continue;
+
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 200) {
+        const alpha = Math.min(a.dialogueDepth, b.dialogueDepth) * (1 - dist / 200) * 0.06;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = `rgba(100,120,180,${alpha})`;
+        ctx.lineWidth = 0.3;
+        ctx.stroke();
+      }
+    }
+  }
+
+  prevMouseX = mouseX;
+  prevMouseY = mouseY;
+}
+
+// === Events ===
+canvas.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  mouseActive = true;
+});
+
+canvas.addEventListener('mouseleave', () => {
+  mouseActive = false;
+});
+
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  mouseX = e.touches[0].clientX;
+  mouseY = e.touches[0].clientY;
+  mouseActive = true;
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  mouseX = e.touches[0].clientX;
+  mouseY = e.touches[0].clientY;
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+  mouseActive = false;
+});
+
+window.addEventListener('resize', resize);
+
+setTimeout(() => {
+  document.getElementById('instructions').style.opacity = '0';
+}, 8000);
+
+// Init
+resize();
+draw();
+</script>
+</body>
+</html>
