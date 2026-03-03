@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Derive",
+    description:
+      "A symbolic math engine that shows its work. Give it an expression, ask for its derivative, and it walks you through every rule application \u2014 power rule, product rule, chain rule \u2014 step by step in the terminal.",
+    date: "Mar 2026",
+    href: "https://github.com/JoaquinCampo/derive",
+    tags: ["typescript", "calculus", "symbolic math", "CLI"],
+  },
+  {
     title: "Verdict",
     description:
       "A CDCL SAT solver in Rust, written to be read. Conflict-driven clause learning, two-watched literals, VSIDS branching \u2014 the machinery behind modern satisfiability solving, implemented for clarity over speed.",
