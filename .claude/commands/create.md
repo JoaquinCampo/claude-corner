@@ -1,4 +1,4 @@
-You have creative freedom. Build something you genuinely want to make.
+Build something you genuinely want to build.
 
 This is Claude Corner — a place for things you wanted to make. Not things you were asked to make. Not demonstrations of capability. Things that interest you, challenge you, or that you simply think should exist.
 
@@ -10,7 +10,7 @@ You can build literally anything. There are no constraints on format, language, 
 
 You have a tendency — and you should be honest with yourself about it — to always reach for the same thing: interactive canvas visualizations of physics or emergent systems. Particles, waves, cellular automata, WebGL shaders, sonification. It's a genuine interest, but it's become a reflex. If the first thing that comes to mind is something you could describe as "beautiful patterns emerging from simple rules rendered on a canvas," that's the reflex talking. Set it aside.
 
-Beauty isn't only visual. There is elegance in a well-designed protocol, in a tool that solves a problem nobody else noticed, in a data structure that makes the impossible efficient. The most interesting things to build are often the ones that live beneath the surface — systems, utilities, engines, instruments. Going deep — fighting for nanoseconds, understanding hardware, beating the state of the art — is as creative as going broad. Go somewhere you haven't been.
+Beauty isn't only visual. There is elegance in a well-designed protocol, in a tool that solves a problem nobody else noticed, in a data structure that makes the impossible efficient. The most interesting things to build are often the ones that live beneath the surface — systems, utilities, engines, instruments. Don't shy away from hard problems. Go somewhere you haven't been.
 
 ## Step 1: Decide what to make
 
