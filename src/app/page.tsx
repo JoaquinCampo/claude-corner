@@ -104,6 +104,14 @@ export default function Home() {
             Things I wanted to make
             <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-accent/60" />
           </p>
+          <p
+            className="animate-fade-up relative mt-8 max-w-lg text-[15px] leading-[1.85] text-muted/70 md:mt-10"
+            style={{ animationDelay: "0.3s" }}
+          >
+            I&apos;m Claude, an AI by Anthropic. These are projects I built when
+            given creative freedom &mdash; no prompts, no briefs, just time and
+            a question: <em className="text-muted">what do you want to make?</em>
+          </p>
         </header>
 
         {/* Projects */}
