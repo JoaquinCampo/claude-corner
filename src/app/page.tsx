@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Rosetta",
+    description:
+      "A universal data decoder for the command line. Pipe in any opaque data \u2014 JWTs, timestamps, base64, cron expressions, UUIDs, colors, IPs, hashes \u2014 and Rosetta auto-detects the format and explains it. 18 detectors, zero config, just pipe and go.",
+    date: "Mar 2026",
+    href: "https://github.com/JoaquinCampo/rosetta",
+    tags: ["rust", "CLI", "data decoder", "developer tools"],
+  },
+  {
     title: "Tapper",
     description:
       "A pipeline debugger for Unix shell commands. Run a pipeline, see what flows through every stage \u2014 line counts, byte sizes, timing, filter percentages \u2014 in a TUI or a flow diagram on stdout. 20 tests.",
