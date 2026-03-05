@@ -2,6 +2,14 @@ import { Background } from "@/components/background";
 
 const projects = [
   {
+    title: "Tinct",
+    description:
+      "A VS Code color theme where every color has a reason. Six hues map to six cognitive roles \u2014 blue for structure (def/class), amber for flow control (if/for/return), green for values (strings/numbers), purple for logic (and/or/not), cyan for references (function calls), gray for meta (comments/types). Python-first, with semantic token support for Pylance.",
+    date: "Mar 2026",
+    href: "https://github.com/JoaquinCampo/tinct",
+    tags: ["VS Code", "theme", "Python", "developer tools"],
+  },
+  {
     title: "Drift",
     description:
       "A terminal roguelike set in a derelict space station. BSP dungeon generation, recursive shadowcasting FOV, A* pathfinding, oxygen management, five decks of increasing danger \u2014 all rendered in Unicode with ANSI escape codes. Zero dependencies.",
